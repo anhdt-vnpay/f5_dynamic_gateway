@@ -1,0 +1,9 @@
+type: google.api.Service
+config_version: 3
+
+http:
+  rules:  
+    - selector: ping.PingService.PingMe
+      get: "/example/ping"
+    - selector: ping.PingService.SlowPing
+      get: "/example/ping/{delay}"

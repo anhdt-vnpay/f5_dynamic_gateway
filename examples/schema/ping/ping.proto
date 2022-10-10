@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package ping;
+// [START golang_declaration]
+option go_package = "github.com/anhdt-vnpay/f5_dynamic_gateway/example/types/ping;ping";
+// [END golang_declaration]
+
+// The Ping service definition
+service PingService {
+    // Ping
+    rpc PingMe(PingRequest) returns (PingReply) {}
+    // Slow ping delay (second)
+    rpc SlowPing(PingRequest) returns (PingReply) {}
+}
+
+// The request message containing the user's name
+message PingRequest {
+    string delay = 1;
+}
+
+// The response message containing the greetings
+message PingReply {
+    string message = 1;
+}

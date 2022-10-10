@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package registration;
+// [START golang_declaration]
+option go_package = "github.com/anhdt-vnpay/f5_dynamic_gateway/types/registration;registration";
+// [END golang_declaration]
+
+// The request message containing the user's name
+message ApiRegistrationRequest {
+    string endpoint = 1;
+    string service_name = 2;
+}
+
+// The response message containing the greetings
+message ApiRegistrationResponse {
+    int64 code = 1;
+    string message = 2;
+}
+
+// The Register service definition
+service ApiRegistrationService {
+    // Register
+    rpc Register(ApiRegistrationRequest) returns (ApiRegistrationResponse) {}
+}
