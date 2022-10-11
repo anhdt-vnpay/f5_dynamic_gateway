@@ -1,11 +1,10 @@
 package services
 
 import (
-	"fmt"
 	"time"
 
-	"github.com/anhdt-vnpay/f5_dynamic_gateway/v1/domain/handler"
-	"github.com/anhdt-vnpay/f5_dynamic_gateway/v1/domain/services"
+	"github.com/anhdt-vnpay/f5_dynamic_gateway/domain/handler"
+	"github.com/anhdt-vnpay/f5_dynamic_gateway/domain/services"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/connectivity"
 	"google.golang.org/grpc/credentials/insecure"
@@ -96,7 +95,6 @@ func (s *defaultConnectionService) manageConnection(conn *grpc.ClientConn, endpo
 func (s *defaultConnectionService) manageLimitedConnnection(connInfo connectionInfo) ([]*grpc.ClientConn, []string) {
 	numberRemove := len(connInfo.connPool) - s.config.MaxConn
 	if numberRemove > 0 {
-		fmt.Println("number conn over = ", numberRemove)
 		for loop := 0; loop < numberRemove; loop++ {
 			endpoint := connInfo.endpoints[loop]
 			conn := connInfo.connPool[loop]
@@ -111,7 +109,6 @@ func (s *defaultConnectionService) manageLimitedConnnection(connInfo connectionI
 func (s *defaultConnectionService) manageRemoveConnection() {
 	for {
 		if len(s.pollToRemove) <= 0 {
-			fmt.Println("No conn to close -> sleep 5 second")
 			time.Sleep(60 * time.Second)
 			continue
 		}
@@ -153,14 +150,11 @@ func (s *defaultConnectionService) loadAll() ([]connectionInfo, error) {
 	if s.dbHandler != nil {
 		serviceNames, err := s.dbHandler.LoadServiceName()
 		if err != nil {
-			fmt.Println("load service name err " + err.Error())
 			return connectionInfos, err
 		}
-		fmt.Println("load service name count ", len(serviceNames))
 		for index := 0; index < len(serviceNames); index++ {
 			serviceName := serviceNames[index]
 			endpoinds, err := s.dbHandler.Load(serviceName)
-			fmt.Println("endpoint count = ", len(endpoinds))
 			if err != nil {
 				continue
 			}

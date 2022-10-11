@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/anhdt-vnpay/f5_dynamic_gateway/v1/domain/handler"
+	"github.com/anhdt-vnpay/f5_dynamic_gateway/domain/handler"
 	"github.com/syndtr/goleveldb/leveldb"
 )
 
@@ -31,7 +31,6 @@ func (handler *defaultDbHandler) LoadServiceName() ([]string, error) {
 		return []string{}, err
 	}
 	dataStr := string(data)
-	fmt.Println("saved service name data ", dataStr)
 	result := strings.Split(dataStr, SEPERATOR)
 	if len(result) == 0 && len(dataStr) > 0 {
 		result = append(result, dataStr)
@@ -45,7 +44,6 @@ func (handler *defaultDbHandler) Load(serviceName string) ([]string, error) {
 		return []string{}, err
 	}
 	dataStr := string(data)
-	fmt.Println("saved endpoint data ", dataStr)
 	result := strings.Split(dataStr, SEPERATOR)
 	if len(result) == 0 && len(dataStr) > 0 {
 		result = append(result, dataStr)
@@ -69,7 +67,6 @@ func (handler *defaultDbHandler) Store(endpoint string, serviceName string) erro
 }
 
 func (handler *defaultDbHandler) Delete(endpoint string, serviceName string) error {
-	fmt.Println("delete endpoint = ", endpoint)
 	err := handler.updateServiceName(serviceName)
 	if err != nil {
 		return err
@@ -80,14 +77,12 @@ func (handler *defaultDbHandler) Delete(endpoint string, serviceName string) err
 	}
 	itemIndex := -1
 	for index, item := range endpoints {
-		fmt.Println("item = ", item)
 		if item == endpoint {
 			itemIndex = index
 			break
 		}
 	}
 	if itemIndex >= 0 {
-		fmt.Println("itemIndex = ", itemIndex)
 		endpoints = append(endpoints[:itemIndex], endpoints[itemIndex+1:]...)
 		return handler.saveData(endpoints, serviceName)
 	}
@@ -108,7 +103,6 @@ func (handler *defaultDbHandler) updateServiceName(serviceName string) error {
 
 func (handler *defaultDbHandler) saveData(data []string, key string) error {
 	savedData := strings.Join(data, SEPERATOR)
-	fmt.Println("saved data ", savedData, " for key ", key)
 	err := handler.db.Put([]byte(key), []byte(savedData), nil)
 	if err != nil {
 		fmt.Println("save data for key ", key, " err = ", err.Error())

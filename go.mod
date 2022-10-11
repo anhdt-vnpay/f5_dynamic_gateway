@@ -1,4 +1,4 @@
-module github.com/anhdt-vnpay/f5_dynamic_gateway/v1
+module github.com/anhdt-vnpay/f5_dynamic_gateway
 
 go 1.16
 
