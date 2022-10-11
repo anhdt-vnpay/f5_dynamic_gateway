@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/anhdt-vnpay/f5_dynamic_gateway/cmd"
+	"github.com/anhdt-vnpay/f5_dynamic_gateway/examples/cmd"
 )
 
 func main() {

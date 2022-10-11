@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/anhdt-vnpay/f5_dynamic_gateway/domain/handler"
-	"github.com/anhdt-vnpay/f5_dynamic_gateway/domain/services"
+	"github.com/anhdt-vnpay/f5_dynamic_gateway/v1/domain/handler"
+	"github.com/anhdt-vnpay/f5_dynamic_gateway/v1/domain/services"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/connectivity"
 	"google.golang.org/grpc/credentials/insecure"

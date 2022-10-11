@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package registration;
 // [START golang_declaration]
-option go_package = "github.com/anhdt-vnpay/f5_dynamic_gateway/types/registration;registration";
+option go_package = "github.com/anhdt-vnpay/f5_dynamic_gateway/v1/types/registration;registration";
 // [END golang_declaration]
 
 // The request message containing the user's name

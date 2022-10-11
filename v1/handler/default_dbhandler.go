@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/anhdt-vnpay/f5_dynamic_gateway/domain/handler"
+	"github.com/anhdt-vnpay/f5_dynamic_gateway/v1/domain/handler"
 	"github.com/syndtr/goleveldb/leveldb"
 )
 

@@ -3,9 +3,9 @@ package services
 import (
 	"context"
 
-	ilogger "github.com/anhdt-vnpay/f5_dynamic_gateway/domain/logger"
-	iservices "github.com/anhdt-vnpay/f5_dynamic_gateway/domain/services"
-	pb "github.com/anhdt-vnpay/f5_dynamic_gateway/types/registration"
+	ilogger "github.com/anhdt-vnpay/f5_dynamic_gateway/v1/domain/logger"
+	iservices "github.com/anhdt-vnpay/f5_dynamic_gateway/v1/domain/services"
+	pb "github.com/anhdt-vnpay/f5_dynamic_gateway/v1/types/registration"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 )
 
