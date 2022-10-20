@@ -60,15 +60,15 @@ func (gateway *gatewayService) Handle(ctx context.Context, pattern string) (*htt
 	return router, err
 }
 
-func GetGatewayName(ctx context.Context) *string {
+func GetGatewayName(ctx context.Context) string {
 	md, ok := metadata.FromIncomingContext(ctx)
 	if !ok {
-		return nil
+		return ""
 	}
 	names := md.Get(gateway_key)
 	if len(names) > 0 {
 		gatewayName := strings.Join(names, ",")
-		return &gatewayName
+		return gatewayName
 	}
-	return nil
+	return ""
 }
