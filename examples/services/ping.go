@@ -8,6 +8,7 @@ import (
 	"time"
 
 	pb "github.com/anhdt-vnpay/f5_dynamic_gateway/examples/types/ping"
+	"github.com/anhdt-vnpay/f5_dynamic_gateway/services"
 )
 
 type pingService struct {
@@ -19,7 +20,8 @@ func NewPingService() pb.PingServiceServer {
 }
 
 func (*pingService) PingMe(ctx context.Context, in *pb.PingRequest) (*pb.PingReply, error) {
-	fmt.Println("Third ctx: ", ctx)
+	gatewayName := services.GetGatewayName(ctx)
+	fmt.Println(fmt.Sprintf("gateway name : %s", *gatewayName))
 	return &pb.PingReply{Message: "PONG"}, nil
 }
 

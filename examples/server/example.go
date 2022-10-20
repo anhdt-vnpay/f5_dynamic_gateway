@@ -3,9 +3,13 @@ package server
 import (
 	"context"
 	"fmt"
+	"log"
 	"net"
 	"net/http"
 	"os"
+	"os/signal"
+	"sync"
+	"syscall"
 	"time"
 
 	handler "github.com/anhdt-vnpay/f5_dynamic_gateway/examples/handler"
@@ -70,7 +74,7 @@ func httpHandlers(listener net.Listener) error {
 		fmt.Println("dbhandler error " + err.Error())
 	}
 	connService := services.NewDefaultConnectionService(dbHandler, endpointHandler)
-	gatewayService := services.NewGatewayService(connService, mux, nil)
+	gatewayService := services.NewGatewayServiceWithName("api1", connService, mux, nil)
 	router, err := gatewayService.Handle(ctx, "/")
 	if err != nil {
 		fmt.Println("handler router error " + err.Error())
@@ -96,12 +100,32 @@ func GatewayGrpcServer(port int) {
 		fmt.Println("grpcServer running ", msg)
 		return
 	}
-	s := grpc.NewServer()
-	pb.RegisterPingServiceServer(s, pingService)
 
-	if err := s.Serve(grpclistener); err != nil {
+	gServer := grpc.NewServer()
+	pb.RegisterPingServiceServer(gServer, pingService)
+
+	sigCh := make(chan os.Signal, 1)
+
+	signal.Notify(sigCh, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
+	// signal.Notify(sigCh, os.Interrupt, syscall.SIGTERM)
+	wg := sync.WaitGroup{}
+	wg.Add(1)
+
+	go func() {
+		s := <-sigCh
+		log.Printf("got signal %v, attempting graceful shutdown", s)
+		// cancel()
+		gServer.GracefulStop()
+		// grpc.Stop() // leads to error while receiving stream response: rpc error: code = Unavailable desc = transport is closing
+		wg.Done()
+	}()
+
+	if err := gServer.Serve(grpclistener); err != nil {
 		msg := fmt.Sprintf("net.Listen: grpcServer error: %s", err)
 		fmt.Println("grpcServer running ", msg)
 		return
 	}
+
+	wg.Wait()
+	log.Println("clean shutdown")
 }
