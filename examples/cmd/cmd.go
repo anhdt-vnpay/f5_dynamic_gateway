@@ -30,11 +30,33 @@ var StartPingExampleGateway = &cobra.Command{
 	},
 }
 
+var StartPingEchoGateway = &cobra.Command{
+	Use:   "example_ping_start_echo_server",
+	Short: " Start echo service",
+	Run: func(cmd *cobra.Command, args []string) {
+		port, _ := cmd.Flags().GetInt("port")
+		exServer.GatewayEchoServer(port)
+	},
+}
+
+var StartPingEchoGateway2 = &cobra.Command{
+	Use:   "example_ping_start_echo_server2",
+	Short: " Start echo service",
+	Run: func(cmd *cobra.Command, args []string) {
+		port, _ := cmd.Flags().GetInt("port")
+		exServer.GatewayEchoServer2(port)
+	},
+}
+
 func init() {
 	StartPingExample.Flags().Int("port", 9000, "port")
 	StartPingExampleGateway.Flags().Int("port", 8900, "port")
+	StartPingEchoGateway.Flags().Int("port", 8901, "port")
+	StartPingEchoGateway2.Flags().Int("port", 8902, "port")
 	//add command
 	RootCmd.AddCommand(StartPingExample)
 
 	RootCmd.AddCommand(StartPingExampleGateway)
+	RootCmd.AddCommand(StartPingEchoGateway)
+	RootCmd.AddCommand(StartPingEchoGateway2)
 }

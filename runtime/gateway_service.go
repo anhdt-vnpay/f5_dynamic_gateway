@@ -1,4 +1,4 @@
-package services
+package runtime
 
 import (
 	"context"
@@ -6,8 +6,6 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/anhdt-vnpay/f5_dynamic_gateway/domain/logger"
-	"github.com/anhdt-vnpay/f5_dynamic_gateway/domain/services"
 	pb "github.com/anhdt-vnpay/f5_dynamic_gateway/types/registration"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"google.golang.org/grpc/metadata"
@@ -24,12 +22,12 @@ type gatewayService struct {
 	gwRouter   *runtime.ServeMux
 }
 
-func NewGatewayService(connService services.ConnectionService, mux *runtime.ServeMux, logger logger.ILogger) services.GatewayService {
+func NewGatewayService(connService ConnectionService, mux *runtime.ServeMux, logger ILogger) GatewayService {
 	return NewGatewayServiceWithName(default_gateway_name, connService, mux, logger)
 }
 
-func NewGatewayServiceWithName(gatewayName string, connService services.ConnectionService, mux *runtime.ServeMux, logger logger.ILogger) services.GatewayService {
-	apiService := NewApiRegistrationServiceServer(connService, logger)
+func NewGatewayServiceWithName(gatewayName string, connService ConnectionService, mux *runtime.ServeMux, logger ILogger) GatewayService {
+	apiService := newApiRegistrationServiceServer(connService, logger)
 	return &gatewayService{
 		name:       gatewayName,
 		apiService: apiService,
@@ -52,12 +50,15 @@ func (gateway *gatewayService) setupGatewayHeader(next http.Handler) http.Handle
 	})
 }
 
-func (gateway *gatewayService) Handle(ctx context.Context, pattern string) (*http.ServeMux, error) {
+func (gateway *gatewayService) Handle(ctx context.Context, pattern string) *HandlerResult {
 	router := http.NewServeMux()
 	gwRouter := gateway.gwRouter
 	err := gateway.register(gwRouter)
 	router.Handle(pattern, gateway.setupGatewayHeader(gwRouter))
-	return router, err
+	return &HandlerResult{
+		MuxServer: router,
+		Err:       err,
+	}
 }
 
 func GetGatewayName(ctx context.Context) string {

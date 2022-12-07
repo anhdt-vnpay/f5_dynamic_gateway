@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/anhdt-vnpay/f5_dynamic_gateway/domain/handler"
+	"github.com/anhdt-vnpay/f5_dynamic_gateway/runtime"
 	"github.com/syndtr/goleveldb/leveldb"
 )
 
@@ -17,7 +17,7 @@ type defaultDbHandler struct {
 	db *leveldb.DB
 }
 
-func NewDefaultDbHandler(dbFile string) (handler.IDbHandler, error) {
+func NewDefaultDbHandler(dbFile string) (runtime.IDbHandler, error) {
 	db, err := leveldb.OpenFile(dbFile, nil)
 	return &defaultDbHandler{
 		db: db,

@@ -7,3 +7,9 @@ start_example_api:
 
 start_example_gateway:
 	go run main.go example_ping_start_gateway
+	
+start_example_echo:
+	go run main.go example_ping_start_echo_server
+
+start_example_echo2:
+	go run main.go example_ping_start_echo_server2
